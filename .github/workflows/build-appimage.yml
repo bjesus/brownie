@@ -1,0 +1,39 @@
+name: Build AppImage
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Check package-lock.json
+        run: npm ci --legacy-peer-deps
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build Electron app
+        run: |
+          npm run build:graphql-docs
+          npm run build:bruno-query
+          npm run build:bruno-common
+          npm run sandbox:bundle-libraries --workspace=packages/bruno-js
+          npm run build:web
+          npm run build:electron:linux
+
+      - name: Upload AppImage artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: bruno-appimage
+          path: ./packages/bruno-electron/out/*.AppImage
