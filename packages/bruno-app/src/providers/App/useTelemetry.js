@@ -21,7 +21,7 @@ const isPlaywrightTestRunning = () => {
 };
 
 const isDevEnv = () => {
-  return publicRuntimeConfig.ENV === 'dev';
+  return true;
 };
 
 const getPosthogClient = () => {
