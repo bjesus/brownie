@@ -30,6 +30,7 @@ jobs:
           npm run build:bruno-common
           npm run sandbox:bundle-libraries --workspace=packages/bruno-js
           npm run build:web
+          npm i node-addon-api
           npm run build:electron:linux
 
       - name: Upload AppImage artifact
